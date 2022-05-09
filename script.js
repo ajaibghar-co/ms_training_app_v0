@@ -48,6 +48,7 @@ async function loadMobileNetFeatureModel() {
   const URL = 'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/feature_vector/5/default/1';
   mobilenet = await tf.loadGraphModel(URL, { fromTFHub: true });
   STATUS.innerText = 'MobileNet v3 loaded successfully!';
+  ENABLE_CAM_BUTTON.style.backgroundColor = "#FF6F00";
 
   // Warm up the model by passing zeros through it once.
   tf.tidy(function () {
@@ -90,21 +91,37 @@ function hasGetUserMedia() {
  **/
 function enableCam() {
   if (hasGetUserMedia()) {
-    // getUsermedia parameters.
-    const constraints = {
-      video: true,
-      width: 640,
-      height: 480
+    var front = false;
+    // document.getElementById('flip-button').onclick = function () { front = !front; };
+
+    var constraints = {
+      video: {
+        width: 400,
+        aspectRatio: 1.777777778,
+        facingMode: (front ? "user" : "environment")
+      },
+      audio: false,
+
     };
 
+    // getUsermedia parameters.
+    // const constraints = {
+
+    //   video: { facingMode: { exact: "environment" } }
+    // };
+
     // Activate the webcam stream.
-    navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-      VIDEO.srcObject = stream;
-      VIDEO.addEventListener('loadeddata', function () {
-        videoPlaying = true;
-        ENABLE_CAM_BUTTON.classList.add('removed');
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then(function (stream) {
+        VIDEO.srcObject = stream;
+        // VIDEO.onloadedmetadata = function(e) {
+        //   VIDEO.play();
+        // };
+        VIDEO.addEventListener('loadeddata', function () {
+          videoPlaying = true;
+          ENABLE_CAM_BUTTON.classList.add('removed');
+        });
       });
-    });
   } else {
     console.warn('getUserMedia() is not supported by your browser');
   }

@@ -1,26 +1,30 @@
 body {
     font-family: helvetica, arial, sans-serif;
-    margin: 2em;
+    margin: 1.5em;
   }
   
   h1 {
     font-style: italic;
+    margin: 1rem;
     color: #FF6F00;
+    font-size: large;
+    text-align: center;
   }
   
   
   video {
-    clear: both;
-    display: block;
-    margin: 10px;
-    background: #000000;
-    width: 640px;
-    height: 480px;
+   
+    margin: 1rem;
+    background: #fff;
+    /* width: 640px;
+    height: 480px; */
   }
   
   button {
-    padding: 10px;
-    margin: 5px 3px 5px 10px;
+    padding: 1rem;
+    margin:0.5rem;
+    font-size: 1rem;
+    background-color: #ffbe8b;
   }
   
   .removed {
@@ -28,9 +32,19 @@ body {
   }
   
   #status {
-    font-size:150%;
+    font-size:small;
   }
 
   .dataCollector{
     background-color: #FF6F00;
+  }
+
+  #enableCam{
+    background-color: #56514d;
+  }
+
+  #flip-button{
+    background-color: #fff;
+    color: #fff;
+    margin:0
   }
