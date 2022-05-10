@@ -60,22 +60,7 @@ async function loadMobileNetFeatureModel() {
 loadMobileNetFeatureModel();
 
 
-let model = tf.sequential();
-model.add(tf.layers.dense({ inputShape: [1024], units: 128, activation: 'relu' }));
-model.add(tf.layers.dense({ units: CLASS_NAMES.length, activation: 'softmax' }));
 
-model.summary();
-
-// Compile the model with the defined optimizer and specify a loss function to use.
-model.compile({
-  // Adam changes the learning rate over time which is useful.
-  optimizer: 'adam',
-  // Use the correct loss function. If 2 classes of data, must use binaryCrossentropy.
-  // Else categoricalCrossentropy is used if more than 2 classes.
-  loss: (CLASS_NAMES.length === 2) ? 'binaryCrossentropy' : 'categoricalCrossentropy',
-  // As this is a classification problem you can record accuracy in the logs too!
-  metrics: ['accuracy']
-});
 
 
 /**
@@ -185,6 +170,7 @@ function dataGatherLoop() {
 }
 
 
+let model = tf.sequential();
 /**
  * Once data collected actually perform the transfer learning.
  **/
@@ -195,6 +181,22 @@ async function trainAndPredict() {
   let outputsAsTensor = tf.tensor1d(trainingDataOutputs, 'int32');
   let oneHotOutputs = tf.oneHot(outputsAsTensor, CLASS_NAMES.length);
   let inputsAsTensor = tf.stack(trainingDataInputs);
+
+  model.add(tf.layers.dense({ inputShape: [1024], units: 128, activation: 'relu' }));
+  model.add(tf.layers.dense({ units: CLASS_NAMES.length, activation: 'softmax' }));
+
+  model.summary();
+
+  // Compile the model with the defined optimizer and specify a loss function to use.
+  model.compile({
+    // Adam changes the learning rate over time which is useful.
+    optimizer: 'adam',
+    // Use the correct loss function. If 2 classes of data, must use binaryCrossentropy.
+    // Else categoricalCrossentropy is used if more than 2 classes.
+    loss: (CLASS_NAMES.length === 2) ? 'binaryCrossentropy' : 'categoricalCrossentropy',
+    // As this is a classification problem you can record accuracy in the logs too!
+    metrics: ['accuracy']
+  });
 
   let results = await model.fit(inputsAsTensor, oneHotOutputs, {
     shuffle: true,
@@ -256,7 +258,7 @@ function reset() {
   console.log('Tensors in memory: ' + tf.memory().numTensors);
 }
 
-function addTrainClasses() {
+async function addTrainClasses() {
   const b = document.createElement('button');
   let buttonnumber = CLASSGROUP.children.length + 1
   b.innerHTML = "Gather Class " + buttonnumber + " Data"
@@ -268,5 +270,25 @@ function addTrainClasses() {
   b.addEventListener('mousedown', gatherDataForClass);
   b.addEventListener('mouseup', gatherDataForClass);
   CLASS_NAMES.push(b.getAttribute('data-name'))
+  
 }
+
+// function loadModelHead() {
+//   let model = tf.sequential();
+//   model.add(tf.layers.dense({ inputShape: [1024], units: 128, activation: 'relu' }));
+//   model.add(tf.layers.dense({ units: CLASS_NAMES.length, activation: 'softmax' }));
+
+//   model.summary();
+
+//   // Compile the model with the defined optimizer and specify a loss function to use.
+//   model.compile({
+//     // Adam changes the learning rate over time which is useful.
+//     optimizer: 'adam',
+//     // Use the correct loss function. If 2 classes of data, must use binaryCrossentropy.
+//     // Else categoricalCrossentropy is used if more than 2 classes.
+//     loss: (CLASS_NAMES.length === 2) ? 'binaryCrossentropy' : 'categoricalCrossentropy',
+//     // As this is a classification problem you can record accuracy in the logs too!
+//     metrics: ['accuracy']
+//   });
+// }
 
