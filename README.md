@@ -10,6 +10,9 @@
 - text based cards
 - no csv or database
 
-![gunakali image](https://github.com/ajaibghar-co/ms_training_app_v0/blob/main/gunakali%20painting%20image.jpg)
 [teachable link](https://teachablemachine.withgoogle.com/models/U7b1I0N-1/)
+
 [ragamala app link](https://ragamala-ar.herokuapp.com/)
+
+
+![gunakali image](https://github.com/ajaibghar-co/ms_training_app_v0/blob/main/gunakali%20painting%20image.jpg)
